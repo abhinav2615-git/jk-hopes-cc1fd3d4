@@ -14,7 +14,203 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      alumni: {
+        Row: {
+          college_name: string
+          company: string | null
+          course_name: string
+          created_at: string
+          current_position: string | null
+          graduation_year: number | null
+          id: string
+          location: string | null
+          name: string
+          photo_url: string | null
+          success_story: string | null
+        }
+        Insert: {
+          college_name: string
+          company?: string | null
+          course_name: string
+          created_at?: string
+          current_position?: string | null
+          graduation_year?: number | null
+          id?: string
+          location?: string | null
+          name: string
+          photo_url?: string | null
+          success_story?: string | null
+        }
+        Update: {
+          college_name?: string
+          company?: string | null
+          course_name?: string
+          created_at?: string
+          current_position?: string | null
+          graduation_year?: number | null
+          id?: string
+          location?: string | null
+          name?: string
+          photo_url?: string | null
+          success_story?: string | null
+        }
+        Relationships: []
+      }
+      assessments: {
+        Row: {
+          budget_range: string | null
+          career_preferences: string[]
+          completed_at: string
+          grades: Json
+          id: string
+          interests: string[]
+          preferred_location: string | null
+          skills: string[]
+          user_id: string
+        }
+        Insert: {
+          budget_range?: string | null
+          career_preferences: string[]
+          completed_at?: string
+          grades: Json
+          id?: string
+          interests: string[]
+          preferred_location?: string | null
+          skills: string[]
+          user_id: string
+        }
+        Update: {
+          budget_range?: string | null
+          career_preferences?: string[]
+          completed_at?: string
+          grades?: Json
+          id?: string
+          interests?: string[]
+          preferred_location?: string | null
+          skills?: string[]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      course_recommendations: {
+        Row: {
+          course_id: string
+          created_at: string
+          id: string
+          match_score: number | null
+          reasons: string[] | null
+          user_id: string
+        }
+        Insert: {
+          course_id: string
+          created_at?: string
+          id?: string
+          match_score?: number | null
+          reasons?: string[] | null
+          user_id: string
+        }
+        Update: {
+          course_id?: string
+          created_at?: string
+          id?: string
+          match_score?: number | null
+          reasons?: string[] | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "course_recommendations_course_id_fkey"
+            columns: ["course_id"]
+            isOneToOne: false
+            referencedRelation: "courses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      courses: {
+        Row: {
+          avg_fees: number | null
+          career_prospects: string[] | null
+          category: string
+          colleges: string[] | null
+          created_at: string
+          description: string | null
+          duration: string | null
+          eligibility: string | null
+          id: string
+          is_government: boolean | null
+          location: string | null
+          name: string
+          skills_developed: string[] | null
+        }
+        Insert: {
+          avg_fees?: number | null
+          career_prospects?: string[] | null
+          category: string
+          colleges?: string[] | null
+          created_at?: string
+          description?: string | null
+          duration?: string | null
+          eligibility?: string | null
+          id?: string
+          is_government?: boolean | null
+          location?: string | null
+          name: string
+          skills_developed?: string[] | null
+        }
+        Update: {
+          avg_fees?: number | null
+          career_prospects?: string[] | null
+          category?: string
+          colleges?: string[] | null
+          created_at?: string
+          description?: string | null
+          duration?: string | null
+          eligibility?: string | null
+          id?: string
+          is_government?: boolean | null
+          location?: string | null
+          name?: string
+          skills_developed?: string[] | null
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          education_level: string | null
+          email: string | null
+          full_name: string
+          id: string
+          location: string | null
+          phone: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          education_level?: string | null
+          email?: string | null
+          full_name: string
+          id?: string
+          location?: string | null
+          phone?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          education_level?: string | null
+          email?: string | null
+          full_name?: string
+          id?: string
+          location?: string | null
+          phone?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
