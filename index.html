@@ -1,24 +1,437 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CareerPath J&K - Personalized Career Guidance for Students</title>
-    <meta name="description" content="Discover your perfect career path with personalized guidance for Jammu & Kashmir students. Connect with government colleges and unlock opportunities in higher education." />
-    <meta name="author" content="Lovable" />
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Student Career Counselor — Prototype</title>
+<style>
+  :root{--bg:#f6f8fb;--card:#fff;--accent:#2b7cff;--muted:#666}
+  body{font-family:Inter,Helvetica,Arial; background:var(--bg); margin:0; padding:20px; color:#222}
+  .container{max-width:920px;margin:0 auto;background:var(--card);padding:20px;border-radius:10px;box-shadow:0 6px 20px rgba(20,30,40,0.06)}
+  h1{margin:0 0 12px;font-size:22px;color:var(--accent)}
+  p.lead{margin:0 0 20px;color:var(--muted)}
+  .flow{display:flex;gap:20px;flex-wrap:wrap}
+  .left{flex:1 1 420px; min-width:300px}
+  .right{width:320px;min-width:260px}
+  .step{display:none}
+  .step.active{display:block}
+  label{display:block;margin:8px 0 6px;font-weight:600}
+  input[type=text], input[type=number], select, textarea{
+    width:100%; padding:10px;border:1px solid #e0e6ef;border-radius:6px;font-size:14px;box-sizing:border-box
+  }
+  .btn-row{display:flex;gap:8px;margin-top:12px}
+  button{padding:10px 12px;border-radius:8px;border:0;background:var(--accent);color:#fff;cursor:pointer}
+  button.secondary{background:#e9eefc;color:#053a88}
+  .chip{display:inline-block;background:#f1f5ff;padding:6px 8px;border-radius:20px;margin:4px 6px 4px 0}
+  ul.results{list-style:none;padding:0;margin:6px 0}
+  ul.results li{background:#fbfdff;border:1px solid #e6f0ff;padding:10px;border-radius:8px;margin:8px 0}
+  .muted{color:var(--muted);font-size:13px}
+  .small{font-size:13px}
+  .status{margin:8px 0;font-style:italic;color:var(--muted)}
+  .copy{margin-left:8px;padding:6px 8px;border-radius:6px;background:#f3f7ff;color:var(--accent);border:1px solid #dbe8ff;cursor:pointer}
+  .center{display:flex;justify-content:center}
+  @media (max-width:740px){.flow{flex-direction:column}.right{width:auto}}
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎓 Student Career Counselor (Prototype)</h1>
+    <p class="lead">Guided flow to ask a student a few quick questions, then show top course recommendations — frontend only (no backend).</p>
 
-    <meta property="og:title" content="CareerPath J&K - Personalized Career Guidance" />
-    <meta property="og:description" content="Discover your perfect career path with personalized guidance for Jammu & Kashmir students. Connect with government colleges and unlock opportunities." />
-    <meta property="og:type" content="website" />
-    <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
+    <div class="flow">
+      <div class="left">
+        <!-- Steps -->
+        <div id="step-1" class="step active">
+          <h3>Welcome</h3>
+          <p class="small">This is a demo. The counselor will ask a few quick questions and then show course suggestions based on your inputs.</p>
+          <div class="btn-row">
+            <button id="startBtn">Start Counseling</button>
+            <button class="secondary" id="skipBtn">Skip and try quick example</button>
+          </div>
+        </div>
 
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:site" content="@lovable_dev" />
-    <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
-  </head>
+        <div id="step-2" class="step">
+          <label>Your name (optional)</label>
+          <input id="name" type="text" placeholder="e.g. Aisha">
+          <div class="btn-row">
+            <button id="toStep3">Next</button>
+            <button class="secondary" id="back1">Back</button>
+          </div>
+        </div>
 
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+        <div id="step-3" class="step">
+          <label>What class are you in?</label>
+          <select id="classLevel">
+            <option value="12">12th</option>
+            <option value="10">10th</option>
+            <option value="graduate">Graduate</option>
+            <option value="other">Other</option>
+          </select>
+
+          <label>Which stream?</label>
+          <select id="stream">
+            <option value="science">Science</option>
+            <option value="commerce">Commerce</option>
+            <option value="arts">Arts / Humanities</option>
+            <option value="undecided">Undecided</option>
+          </select>
+
+          <label>Average grade (%)</label>
+          <input id="grade" type="number" min="0" max="100" placeholder="e.g. 78">
+
+          <div class="btn-row">
+            <button id="toStep4">Next</button>
+            <button class="secondary" id="back2">Back</button>
+          </div>
+        </div>
+
+        <div id="step-4" class="step">
+          <label>Choose your interests (click any that apply)</label>
+          <div id="interestChips">
+            <span class="chip" data-val="computers">Computers / Coding</span>
+            <span class="chip" data-val="electronics">Electronics / Robotics</span>
+            <span class="chip" data-val="business">Business / Finance</span>
+            <span class="chip" data-val="design">Design / Creative</span>
+            <span class="chip" data-val="helping">Helping people / Health</span>
+            <span class="chip" data-val="machines">Machines / Manufacturing</span>
+            <span class="chip" data-val="law">Law / Debating</span>
+            <span class="chip" data-val="hospitality">Hospitality / Travel</span>
+            <span class="chip" data-val="research">Research / Science</span>
+          </div>
+
+          <label class="muted small">Or write tags (comma separated):</label>
+          <input id="freeInterests" type="text" placeholder="e.g. coding, robotics, startups">
+
+          <div class="btn-row">
+            <button id="toStep5">Next</button>
+            <button class="secondary" id="back3">Back</button>
+          </div>
+        </div>
+
+        <div id="step-5" class="step">
+          <label>What matters most to you? (choose up to 2)</label>
+          <div>
+            <label><input type="checkbox" name="prefs" value="tech"> Tech & innovation</label><br>
+            <label><input type="checkbox" name="prefs" value="money"> High salary / Business</label><br>
+            <label><input type="checkbox" name="prefs" value="help"> Helping people / Social impact</label><br>
+            <label><input type="checkbox" name="prefs" value="creative"> Creativity / Arts</label><br>
+            <label><input type="checkbox" name="prefs" value="hands"> Hands-on / Skilled trade</label>
+          </div>
+
+          <div class="btn-row">
+            <button id="analyzeBtn">Get Recommendations</button>
+            <button class="secondary" id="back4">Back</button>
+          </div>
+        </div>
+
+        <!-- Analysis / Results -->
+        <div id="step-6" class="step">
+          <h3>Analysis</h3>
+          <p id="analyzing" class="status">Analyzing your responses...</p>
+          <div id="resultsWrap" style="display:none">
+            <h4>Top recommendations</h4>
+            <ul class="results" id="resultsList"></ul>
+            <div class="btn-row">
+              <button id="saveLocal">Save this result (browser)</button>
+              <button class="secondary" id="restart">Start Over</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="right">
+        <div style="background:#fcfdff;border:1px solid #eef6ff;padding:12px;border-radius:10px">
+          <h4>Quick demo tips</h4>
+          <p class="small muted">Try inputs below to show different results:</p>
+          <ul class="small muted">
+            <li><b>For Coding →</b> stream=Science, interests=computers, prefs=tech</li>
+            <li><b>For Business →</b> stream=Commerce, interests=business, prefs=money</li>
+            <li><b>Undecided →</b> write interests (e.g. 'help people, kids')</li>
+          </ul>
+          <div style="margin-top:10px">
+            <button id="exampleCoding">Try: Coding</button>
+            <button id="exampleBusiness" class="secondary">Try: Business</button>
+          </div>
+        </div>
+
+        <div style="margin-top:12px;background:#fff;padding:12px;border-radius:10px;border:1px solid #f1f3f6">
+          <h4>Last saved</h4>
+          <div id="lastSaved" class="muted small">No saved recommendation yet.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+/* ---------- Data: simple rule-based course bank ---------- */
+const COURSES = [
+  { id:'btech-cse', title:'B.Tech / BE — Computer Science', stream:'science',
+    tags:['computers','coding','software','programming','algorithms'], minGrade:60,
+    desc:'Engineering focused on programming, systems, and software development.' },
+  { id:'bsc-cs', title:'BSc Computer Science', stream:'science',
+    tags:['computers','programming','data','software'], minGrade:50,
+    desc:'Bachelor in science with strong programming and theory foundations.' },
+  { id:'btech-ece', title:'B.Tech / BE — Electronics & Communication', stream:'science',
+    tags:['electronics','circuits','robotics','hardware'], minGrade:55,
+    desc:'Electronics, embedded systems, and communication technologies.' },
+  { id:'bcom', title:'B.Com — Commerce', stream:'commerce',
+    tags:['business','accounts','finance','economics'], minGrade:45,
+    desc:'Accounting, finance and trade — good for business careers.' },
+  { id:'bba', title:'BBA — Business Administration', stream:'commerce',
+    tags:['management','entrepreneurship','business'], minGrade:45,
+    desc:'Management and business skills; path to MBA or industry roles.' },
+  { id:'ba', title:'BA — Arts & Humanities', stream:'arts',
+    tags:['history','literature','writing','culture','arts'], minGrade:40,
+    desc:'Humanities degree (history, languages, literature, social sciences).' },
+  { id:'psych', title:'BA / BSc — Psychology', stream:'arts',
+    tags:['psychology','behavior','helping','research'], minGrade:45,
+    desc:'Study human behaviour; careers in counseling, HR, research.' },
+  { id:'law', title:'LLB (Law)', stream:'undecided',
+    tags:['law','debate','justice','advocacy'], minGrade:50,
+    desc:'Legal studies leading to careers in law, policy, or consulting.' },
+  { id:'bpharm', title:'B.Pharm / Pharmacy', stream:'science',
+    tags:['pharmacy','chemistry','health','medicine'], minGrade:55,
+    desc:'Pharmacy and pharmaceutical sciences — industry & research roles.' },
+  { id:'hotel', title:'BHM / Hotel Management', stream:'undecided',
+    tags:['hospitality','service','management','travel'], minGrade:40,
+    desc:'Hospitality industry — hotels, tourism, service businesses.' },
+  { id:'voc', title:'Diploma / Vocational / ITI', stream:'undecided',
+    tags:['hands-on','trade','skilled','practical'], minGrade:30,
+    desc:'Shorter, skill-based courses for fast employment.' }
+];
+
+/* ---------- Helpers & UI flow ---------- */
+const state = { name:'', classLevel:'12', stream:'science', grade:0, interests:[], prefs:[] };
+
+function showStep(n){
+  document.querySelectorAll('.step').forEach(s=>s.classList.remove('active'));
+  document.getElementById(`step-${n}`).classList.add('active');
+}
+
+document.getElementById('startBtn').addEventListener('click', ()=> showStep(2));
+document.getElementById('skipBtn').addEventListener('click', () => {
+  // quick example defaults
+  state.name = 'Demo';
+  state.classLevel = '12';
+  state.stream = 'science';
+  state.grade = 80;
+  state.interests = ['computers'];
+  state.prefs = ['tech'];
+  runAnalysis();
+  showStep(6);
+});
+
+document.getElementById('toStep3').addEventListener('click', ()=>{
+  state.name = document.getElementById('name').value.trim();
+  showStep(3);
+});
+document.getElementById('back1').addEventListener('click', ()=> showStep(1));
+
+document.getElementById('toStep4').addEventListener('click', ()=>{
+  state.classLevel = document.getElementById('classLevel').value;
+  state.stream = document.getElementById('stream').value;
+  const g = parseFloat(document.getElementById('grade').value);
+  state.grade = Number.isFinite(g)? g : 0;
+  showStep(4);
+});
+document.getElementById('back2').addEventListener('click', ()=> showStep(2));
+
+/* interest chips toggle */
+document.querySelectorAll('#interestChips .chip').forEach(ch => {
+  ch.addEventListener('click', ()=>{
+    ch.classList.toggle('selected');
+    const val = ch.dataset.val;
+    if(ch.classList.contains('selected')){
+      state.interests = Array.from(new Set([...state.interests, val]));
+      ch.style.background='#eaf4ff';
+      ch.style.border='1px solid #cfe9ff';
+    } else {
+      state.interests = state.interests.filter(x=>x!==val);
+      ch.style.background='';
+      ch.style.border='';
+    }
+  });
+});
+
+document.getElementById('toStep5').addEventListener('click', ()=>{
+  // merge free interests
+  const free = document.getElementById('freeInterests').value;
+  if(free.trim()){
+    const arr = free.split(',').map(s=>s.trim().toLowerCase()).filter(Boolean);
+    state.interests = Array.from(new Set([...state.interests, ...arr]));
+  }
+  showStep(5);
+});
+document.getElementById('back3').addEventListener('click', ()=> showStep(3));
+
+document.getElementById('analyzeBtn').addEventListener('click', ()=>{
+  const checks = Array.from(document.querySelectorAll('input[name="prefs"]:checked')).map(i=>i.value);
+  state.prefs = checks.slice(0,2); // take up to 2
+  // finalize: run analysis
+  runAnalysis();
+  showStep(6);
+});
+document.getElementById('back4').addEventListener('click', ()=> showStep(4));
+
+document.getElementById('restart').addEventListener('click', ()=> {
+  // reset state & UI
+  state.name=''; state.classLevel='12'; state.stream='science'; state.grade=0; state.interests=[]; state.prefs=[];
+  document.getElementById('name').value=''; document.getElementById('grade').value='';
+  document.getElementById('freeInterests').value='';
+  document.querySelectorAll('#interestChips .chip').forEach(c=>{c.classList.remove('selected'); c.style.background=''; c.style.border='';});
+  document.querySelectorAll('input[name="prefs"]').forEach(i=>i.checked=false);
+  document.getElementById('resultsList').innerHTML='';
+  document.getElementById('resultsWrap').style.display='none';
+  document.getElementById('analyzing').style.display='block';
+  showStep(1);
+});
+
+/* Example buttons */
+document.getElementById('exampleCoding').addEventListener('click', ()=> {
+  document.getElementById('name').value='Demo';
+  document.getElementById('classLevel').value='12';
+  document.getElementById('stream').value='science';
+  document.getElementById('grade').value='85';
+  document.getElementById('freeInterests').value='coding,ai';
+  document.querySelectorAll('#interestChips .chip').forEach(c=>{if(c.dataset.val==='computers') c.click()});
+  showStep(5);
+});
+document.getElementById('exampleBusiness').addEventListener('click', ()=> {
+  document.getElementById('name').value='Demo';
+  document.getElementById('classLevel').value='12';
+  document.getElementById('stream').value='commerce';
+  document.getElementById('grade').value='72';
+  document.getElementById('freeInterests').value='business,entrepreneur';
+  document.querySelectorAll('#interestChips .chip').forEach(c=>{if(c.dataset.val==='business') c.click()});
+  showStep(5);
+});
+
+/* ---------- Analysis logic (simple scoring) ---------- */
+function normalizeText(s){ return (s||'').toString().toLowerCase().trim(); }
+function tokenize(s){ return s.split(/\W+/).map(x=>x.trim()).filter(Boolean); }
+
+function runAnalysis(){
+  // show analyzing status with typing dots
+  const analyzing = document.getElementById('analyzing');
+  analyzing.style.display='block';
+  analyzing.textContent = 'Analyzing your responses...';
+  document.getElementById('resultsWrap').style.display='none';
+  document.getElementById('resultsList').innerHTML='';
+
+  // small delay to simulate processing
+  setTimeout(()=> {
+    const results = recommendCourses(state);
+    displayResults(results);
+    analyzing.style.display='none';
+    document.getElementById('resultsWrap').style.display='block';
+  }, 900);
+}
+
+function recommendCourses(user){
+  const userInterests = (user.interests||[]).map(x=>normalizeText(x));
+  const prefs = (user.prefs||[]);
+
+  // mapping preferences to tags
+  const prefMap = {
+    tech:['computers','programming','software','electronics','robotics','data','algorithms'],
+    money:['business','finance','accounts','economics','entrepreneurship'],
+    help:['health','psychology','helping','social'],
+    creative:['design','writing','arts','culture'],
+    hands:['machines','manufacturing','hands-on','skilled','trade']
+  };
+
+  // score each course
+  const scored = COURSES.map(c => {
+    let score = 0;
+    // stream match
+    if(user.stream === c.stream) score += 35;
+    else if(c.stream === 'undecided') score += 10;
+    // grade influence
+    const g = Number(user.grade) || 0;
+    if(g >= c.minGrade) score += 25 + Math.min(10, (g - c.minGrade) / 5); // reward good grade
+    else if(g > 0) score += Math.max(0, (g / c.minGrade) * 10);
+
+    // interests match (exact tag or substring)
+    c.tags.forEach(tag => {
+      userInterests.forEach(u => {
+        if(u.includes(tag) || tag.includes(u)) score += 12;
+      });
+    });
+
+    // preferences
+    prefs.forEach(p => {
+      const map = prefMap[p] || [];
+      map.forEach(tag => {
+        if(c.tags.includes(tag)) score += 10;
+      });
+    });
+
+    // small bias: if student is undecided but interest tags match strongly, boost
+    if(user.stream === 'undecided' && userInterests.length > 0) score += 5;
+
+    return {course:c, score: Math.round(score*10)/10};
+  });
+
+  scored.sort((a,b)=>b.score - a.score);
+  return scored.slice(0,5); // top 5
+}
+
+/* ---------- UI: show results and enable save/copy ---------- */
+function displayResults(list){
+  const ul = document.getElementById('resultsList');
+  ul.innerHTML = '';
+  list.forEach((item, idx) => {
+    const li = document.createElement('li');
+    li.innerHTML = `<strong>${idx+1}. ${item.course.title}</strong>
+      <div class="muted small">${item.course.desc}</div>
+      <div class="small" style="margin-top:8px"><b>Score:</b> ${item.score}</div>
+      <div class="small" style="margin-top:6px"><b>Why:</b> ${whyRecommended(item.course)}</div>`;
+    ul.appendChild(li);
+  });
+
+  // update last saved box if any
+  const last = localStorage.getItem('lastRecommendation');
+  if(last){
+    const obj = JSON.parse(last);
+    document.getElementById('lastSaved').textContent = `${obj.timestamp} — ${obj.summary}`;
+  } else {
+    document.getElementById('lastSaved').textContent = 'No saved recommendation yet.';
+  }
+
+  // hook save button
+  document.getElementById('saveLocal').onclick = () => {
+    const payload = {
+      timestamp: new Date().toLocaleString(),
+      name: state.name,
+      profile: {...state},
+      results: list.map(it=> ({id:it.course.id, title:it.course.title, score:it.score}))
+    };
+    localStorage.setItem('lastRecommendation', JSON.stringify({timestamp:payload.timestamp, summary:payload.results.map(r=>r.title).join(', '), data:payload}));
+    document.getElementById('lastSaved').textContent = `${payload.timestamp} — ${payload.results.map(r=>r.title).join(', ')}`;
+    alert('Saved locally in browser (for demo).');
+  };
+}
+
+function whyRecommended(course){
+  // small friendly sentence
+  if(course.stream === 'commerce') return 'Matches commerce interests and business/finance skills.';
+  if(course.stream === 'science'){
+    if(course.tags.includes('computers')) return 'Fits a strong interest in computers, programming and tech.';
+    if(course.tags.includes('electronics')) return 'Good for students who like hardware, electronics, and robotics.';
+    return 'Strong science focus and technical preparation.';
+  }
+  if(course.stream === 'arts') return 'Great match for humanities and creative or social interests.';
+  return 'Good fit based on your interests and preferences.';
+}
+
+/* expose a quick copy function (optional) */
+function copyResultsAsText(){
+  const last = localStorage.getItem('lastRecommendation');
+  if(!last) return alert('No saved recommendation.');
+  const obj = JSON.parse(last);
+  const text = `Recommendation (${obj.timestamp}): ${obj.summary}`;
+  navigator.clipboard?.writeText(text).then(()=> alert('Copied recommendation to clipboard.'));
+}
+</script>
+</body>
 </html>
